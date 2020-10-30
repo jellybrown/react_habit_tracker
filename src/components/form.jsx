@@ -1,25 +1,26 @@
-import React, { Component } from "react";
+import React, { memo } from "react";
 
-class Form extends Component {
-  inputRef = React.createRef();
-  onSubmit = (e) => {
+const Form = memo((props) => {
+  const formRef = React.createRef();
+  const inputRef = React.createRef();
+
+  const onSubmit = (e) => {
     e.preventDefault();
-    const name = this.inputRef.current.value;
-    name && this.props.onAdd(name);
-    this.inputRef.current.value = "";
+    const name = inputRef.current.value;
+    name && props.onAdd(name);
+    formRef.current.reset();
   };
-  render() {
-    return (
-      <form onSubmit={this.onSubmit}>
-        <input ref={this.inputRef} type="text" id="add-form" />
-        <label htmlFor="add-form"></label>
-        <button type="submit" id="add-btn">
-          Add
-        </button>
-        <label htmlFor="add-btn"></label>
-      </form>
-    );
-  }
-}
+
+  return (
+    <form ref={formRef} onSubmit={onSubmit}>
+      <input ref={inputRef} type="text" id="add-form" />
+      <label htmlFor="add-form"></label>
+      <button type="submit" id="add-btn">
+        Add
+      </button>
+      <label htmlFor="add-btn"></label>
+    </form>
+  );
+});
 
 export default Form;

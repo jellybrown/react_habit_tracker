@@ -12,17 +12,22 @@ class App extends Component {
     ],
   };
   handleIncrement = (habit) => {
-    console.log(habit); // +버튼누르면 각 아이들의 전체정보가 뜸 (확인해보기)
-    const habits = [...this.state.habits]; // habits를 복사해서 새로운 habits배열을 만듦
-    const index = habits.indexOf(habit); // 인덱스를 찾는다.
-    habits[index].count++; //habits의 인덱스마다 count를 올려준다.
+    const habits = this.state.habits.map((item) => {
+      if (item.id === habit.id) {
+        return { ...habit, count: habit.count + 1 };
+      }
+      return item;
+    });
     this.setState({ habits }); // 업데이트
   };
   handleDecrement = (habit) => {
-    const habits = [...this.state.habits];
-    const index = habits.indexOf(habit);
-    const count = habits[index].count - 1;
-    habits[index].count = count < 0 ? 0 : count;
+    const habits = this.state.habits.map((item) => {
+      if (item.id === habit.id) {
+        const count = habit.count - 1;
+        return { ...habit, count: count < 0 ? 0 : count };
+      }
+      return item;
+    });
     this.setState({ habits });
   };
 
@@ -38,7 +43,10 @@ class App extends Component {
 
   handleReset = () => {
     const habits = this.state.habits.map((habit) => {
-      habit.count = 0;
+      if (habit.count !== 0) {
+        habit.count = 0;
+        return { ...habit };
+      }
       return habit;
     });
     this.setState({ habits });
